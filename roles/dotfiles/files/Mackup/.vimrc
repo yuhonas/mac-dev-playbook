@@ -35,7 +35,8 @@ endif
 call plug#begin('~/.vim/plugged')
 " general plugins
 Plug 'tpope/vim-sensible'
-Plug '/usr/local/opt/fzf'
+
+Plug '/home/linuxbrew/.linuxbrew/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'

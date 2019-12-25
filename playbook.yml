@@ -8,7 +8,7 @@
 - hosts: all
   connection: local
   roles:
-    - system
+    #- system
     - { role: dotfiles, tags: [dotfiles] }
 
 - hosts: os_Darwin
@@ -16,7 +16,7 @@
   roles:
     - osx-apps
     - osx-defaults
-      
+
 - hosts: os_Linux
   connection: local
   roles:

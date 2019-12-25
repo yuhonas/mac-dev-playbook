@@ -1,13 +1,30 @@
-- name: create temporary install directory for oh-my-zsh
-  tempfile:
-    state: directory
-    prefix: oh-my-zsh
-  register: tempdir
+#- name: create temporary install directory for oh-my-zsh
+#  tempfile:
+#    state: directory
+#    prefix: oh-my-zsh
+#  register: tempdir
+#
+#- name: get oh-my-zsh install script
+#  get_url:
+#    url: https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+#    dest: "{{ tempdir.path }}/install.sh"
+#
+#- name: execute oh my zsh setup script
+#  script: "{{ tempdir.path }}/install.sh"
 
-- name: get oh-my-zsh install script
-  get_url:
-    url: https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
-    dest: "{{ tempdir.path }}/install.sh"
+- name: check for zsh binary path
+  shell: which zsh
+  register: zsh_path
 
-- name: execute oh my zsh setup script
-  script: "{{ tempdir.path }}/install.sh"
+- lineinfile:
+    path: /etc/shells
+    regexp: "{{ zsh_path.stdout | regex_escape }}"
+    insertafter: EOF
+    state: present
+    line: "{{ zsh_path.stdout }}"
+  become: true
+
+- name: setting zsh as the default shell
+  command: "chsh -s {{ zsh_path.stdout }} {{ ansible_env.USER }}"
+  when: ansible_env.SHELL.find('zsh') == -1
+  become: true
